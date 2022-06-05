@@ -5,6 +5,7 @@ import util
 
 def make_decision(board: List[List[str]], is_player_turn: bool) -> List[int]:
     if not is_player_turn:
+        print("AI is deciding...")
         decision = util.optimal_decision(board)
         print(f"AI chooses {decision}")
         return decision
