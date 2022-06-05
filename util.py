@@ -7,34 +7,33 @@ LINES = [[[i, j] for i in range(3)] for j in range(3)]\
 
 def optimal_decision(board: List[List[str]]) -> List[int]:
     index = None
-    max_possible_solutions = -float("inf")
+    max_score = -float("inf")
     for i in range(3):
         for j in range(3):
             if board[i][j] != ".":
                 continue
             board[i][j] = "o"
-            num_solutions = possible_solutions(board, True)
+            score = get_score(board, True, 1)
             board[i][j] = "."
-            if num_solutions > max_possible_solutions:
+            if score > max_score:
                 index = [i, j]
-                max_possible_solutions = num_solutions
+                max_score = score
     return index
 
 
-def possible_solutions(board: List[List[str]], is_player_turn: bool) -> int:
+def get_score(board: List[List[str]], is_player_turn: bool, level: int) -> int:
     winner = get_winner(board)
-    if winner:
-        if winner == "o":
-            return 1
-        return -1
+    if winner == "o":
+        return 1 / level
+    if winner == "x":
+        return -0.5 / level
     num_solutions = 0
     for i in range(3):
         for j in range(3):
-            if not is_valid_choice(board, i, j):
-                continue
-            board[i][j] = "x" if is_player_turn else "o"
-            num_solutions += possible_solutions(board, not is_player_turn)
-            board[i][j] = "."
+            if is_valid_choice(board, i, j):
+                board[i][j] = "x" if is_player_turn else "o"
+                num_solutions += get_score(board, not is_player_turn, level + 1)
+                board[i][j] = "."
     return num_solutions
 
 
