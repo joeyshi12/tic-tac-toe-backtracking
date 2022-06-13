@@ -27,14 +27,14 @@ def get_score(board: List[List[str]], is_player_turn: bool, level: int) -> int:
         return 1 / level
     if winner == "x":
         return -0.5 / level
-    num_solutions = 0
+    score = 0
     for i in range(3):
         for j in range(3):
             if is_valid_choice(board, i, j):
                 board[i][j] = "x" if is_player_turn else "o"
-                num_solutions += get_score(board, not is_player_turn, level + 1)
+                score += get_score(board, not is_player_turn, level + 1)
                 board[i][j] = "."
-    return num_solutions
+    return score
 
 
 def is_valid_choice(board: List[List[str]], i: int, j: int) -> bool:
